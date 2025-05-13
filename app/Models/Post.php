@@ -10,4 +10,14 @@ class Post extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
+    protected $fillable = [
+        'title',
+        'content',
+        'image',
+        'slug',
+        'user_id',
+        'category_id',
+        'published_at'
+    ];
 }
