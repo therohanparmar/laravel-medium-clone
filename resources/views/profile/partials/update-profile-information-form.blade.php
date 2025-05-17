@@ -13,14 +13,32 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        @if ($user->image)
+            <div>
+                <img src="{{ Storage::url($user->image) }}" alt="{{ $user->name }}" class="rounded-full h-20 w-20">
+            </div>
+        @endif
+
+        <div>
+            <x-input-label class="mb-2" for="image" :value="__('Avatar')" />
+            <input class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" id="file_input" type="file" name="image"  :value="old('image')" >
+            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        </div>
+
+        <div>
+            <x-input-label for="username" :value="__('Username')" />
+            <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)" required autofocus autocomplete="name" />
+            <x-input-error class="mt-2" :messages="$errors->get('username')" />
         </div>
 
         <div>
@@ -38,6 +56,7 @@
                         </button>
                     </p>
 
+
                     @if (session('status') === 'verification-link-sent')
                         <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
                             {{ __('A new verification link has been sent to your email address.') }}
@@ -45,6 +64,14 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="bio" :value="__('Bio')" />
+            <x-input-area rows="10" id="bio" class="block mt-1 w-full" type="text" name="bio" required>
+                {{ old('bio', $user->bio) }}
+            </x-input-area>
+            <x-input-error :messages="$errors->get('bio')" class="mt-2" />
         </div>
 
         <div class="flex items-center gap-4">
