@@ -45,6 +45,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class);
     }
 
+    public function following()
+    {
+        return $this->belongsToMany(Post::class,'followers', 'follower_id', 'user_id');
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(Post::class,'followers', 'user_id', 'follower_id');
+    }
+
+
     /**
      * Get the attributes that should be cast.
      *
@@ -64,5 +75,10 @@ class User extends Authenticatable implements MustVerifyEmail
             return Storage::url($this->image);
         }
         return null;
+    }
+
+    public function isFollowedBy(User $user)
+    {
+        return $this->followers()->where('follower_id', $user->id)->exists();
     }
 }
