@@ -12,7 +12,7 @@ class="flex bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-80
     <div class="mb-3 font-normal text-gray-700 dark:text-gray-400">
         {{ Str::words($post->content, 20) }}
     </div>
-    <a href="#">
+    <a href="{{ route('post.show',['username' => $post->user->username, 'post' => $post->slug]) }}">
         <x-primary-button>
             Read more
             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
