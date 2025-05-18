@@ -2,17 +2,17 @@
 class="flex bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-8">
 <a href="#">
     <img class="rounded-l-lg w-48 h-full object-cover"
-        src="{{ Storage::url($post->image) }}" alt="Image" />
+        src="{{ Storage::url($post->image,) }}" alt="Image" />
 </a>
 <div class="p-5 flex-1">
-    <a href="#">
+    <a href="{{ route('post.show',['username' => $post->user->username, 'post' => $post->slug]) }}">
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             {{ $post->title }}</h5>
     </a>
     <div class="mb-3 font-normal text-gray-700 dark:text-gray-400">
         {{ Str::words($post->content, 20) }}
     </div>
-    <a href="#">
+    <a href="{{ route('post.show',['username' => $post->user->username, 'post' => $post->slug]) }}">
         <x-primary-button>
             Read more
             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
