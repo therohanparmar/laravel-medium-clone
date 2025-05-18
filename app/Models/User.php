@@ -55,6 +55,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Post::class,'followers', 'user_id', 'follower_id');
     }
 
+    public function hasClapped(Post $post)
+    {
+        return $post->claps()->where('user_id', $this->id)->exists();
+    }
+
 
     /**
      * Get the attributes that should be cast.

@@ -26,7 +26,7 @@
                 </div>
 
                 <!-- Clap Section -->
-                <x-clap-button />
+                <x-clap-button :post="$post" />
 
                 <!-- Post Content Section -->
                 <div class="mt-8">
@@ -43,7 +43,7 @@
                     </span>
                 </div>
 
-                <x-clap-button />
+                <x-clap-button :post="$post" />
 
             </div>
         </div>
