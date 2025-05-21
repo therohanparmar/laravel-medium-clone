@@ -5,20 +5,22 @@ namespace App\Models;
 use App\Models\Clap;
 use App\Models\User;
 use App\Models\Category;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Post extends Model
+class Post extends Model implements HasMedia
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, InteractsWithMedia;
 
     protected $fillable = [
         'title',
         'content',
-        'image',
+        // 'image',
         'slug',
         'user_id',
         'category_id',
@@ -40,6 +42,16 @@ class Post extends Model
         return $this->hasMany(Clap::class);
     }
 
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('preview')
+            ->width(400);
+        $this
+        ->addMediaConversion('large')
+        ->width(1200);
+    }
+
 
     public function readTime(int $wordsPerMinute = 100)
     {
@@ -49,11 +61,15 @@ class Post extends Model
         return max(1, $minutes);
     }
 
-    public function imageUrl()
+    public function imageUrl($conversionName = '')
     {
-        if ($this->image) {
-            return Storage::url($this->image);
+        $media = $this->getFirstMedia();
+        if (!$media) {
+            return null;
         }
-        return null;
+        if ($media->hasGeneratedConversion($conversionName)) {
+            return $media->getUrl($conversionName);
+        }
+        return $media->getUrl();
     }
 }
