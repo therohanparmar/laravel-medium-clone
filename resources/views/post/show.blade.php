@@ -9,14 +9,14 @@
                     <x-user-avatar :user="$post->user" size='h-12 w-12' />
                     <div>
                         <x-follow-ctr :user="$post->user" class="flex gap-2">
-                            <a href="{{ route('profile.show', ['user' => $post->user]) }}"  class="hover:underline">{{ $post->user->name }}</a>
+                            <a href="{{ route('profile.show', ['user' => $post->user]) }}"
+                                class="hover:underline">{{ $post->user->name }}</a>
                             @auth
-                                &middot;
-                                <button
-                                    @click="follow()"
-                                    :class="following ? 'text-red-600' : 'text-emerald-600'"
-                                    x-text="following ? 'Unfollow' : 'Follow'"
-                                ></button>
+                                @if (auth()->id() !== $post->user->id)
+                                    &middot;
+                                    <button @click="follow()" :class="following ? 'text-red-600' : 'text-emerald-600'"
+                                        x-text="following ? 'Unfollow' : 'Follow'"></button>
+                                @endif
                             @endauth
                         </x-follow-ctr>
                         <div class="flex gap-2 text-gray-500 text-sm">
@@ -26,6 +26,25 @@
                         </div>
                     </div>
                 </div>
+
+                @auth
+                    @if (auth()->id() === $post->user->id)
+                        <div class="py-4 mt-8 border-t border-b border-gray-200">
+                            <x-primary-button href="{{ route('post.edit', $post->slug) }}">
+                                Edit Post
+                            </x-primary-button>
+                            <form x-data
+                                @submit.prevent="if (confirm('Are you sure you want to delete this post?')) $el.submit()"
+                                action="{{ route('post.destroy', $post) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('delete')
+                                <x-danger-button>
+                                    Delete Post
+                                </x-danger-button>
+                            </form>
+                        </div>
+                    @endif
+                @endauth
 
                 <!-- Clap Section -->
                 <x-clap-button :post="$post" />

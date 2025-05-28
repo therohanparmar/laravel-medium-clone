@@ -12,9 +12,15 @@ class="flex bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-80
     <div class="mb-3 font-normal text-gray-700 dark:text-gray-400">
         {{ Str::words($post->content, 20) }}
     </div>
-    <a href="{{ route('post.show',['username' => $post->user->username, 'post' => $post->slug]) }}" class="text-sm text-gray-400 flex gap-4">
-        {{ $post->created_at->format('M d, Y') }}
-
+    <div class="text-sm text-gray-400 flex gap-4">
+        <div class="">
+            by
+            <a href="{{ route('profile.show', $post->user->username) }}" class="text-gray-600 hover:underline">
+                {{ $post->user->username }}
+            </a>
+            at
+            {{ $post->created_at->format('M d, Y') }}
+        </div>
         <span class="inline-flex gap-1 items-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-label="clap"
             class="text-gray-500 hover:text-gray-900">
@@ -25,8 +31,8 @@ class="flex bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-80
                     d="M14.741 8.309c-.18-.267-.446-.455-.728-.502a.67.67 0 0 0-.533.127c-.146.113-.59.458-.199 1.296l1.184 2.503a.448.448 0 0 1-.236.755.445.445 0 0 1-.483-.248L7.614 6.106A.816.816 0 1 0 6.459 7.26l3.643 3.644a.446.446 0 1 1-.631.63L5.83 7.896l-1.03-1.03a.82.82 0 0 0-1.395.577.81.81 0 0 0 .24.576l1.027 1.028 3.643 3.643a.444.444 0 0 1-.144.728.44.44 0 0 1-.486-.098l-3.64-3.64a.82.82 0 0 0-1.335.263.81.81 0 0 0 .178.89l1.535 1.534 2.287 2.288a.445.445 0 0 1-.63.63l-2.287-2.288a.813.813 0 0 0-1.393.578c0 .216.086.424.238.577l4.403 4.403c2.79 2.79 5.495 4.119 8.681.931 2.269-2.271 2.708-4.588 1.342-7.086z"
                 clip-rule="evenodd"></path>
             </svg>
-            {{ $post->claps_count }}
+            {{  $post->claps_count }}
         </span>
-    </a>
+    </div>
 </div>
 </div>
